@@ -1,0 +1,243 @@
+---
+const certificates = [
+  {
+    title: "Python Data Structures",
+    issuer: "University of Michigan (Coursera)",
+    recipient: "Matías Sebastian Diaz Quispe",
+    date: "May 10, 2025",
+    tag: "Software Engineering",
+    image: "/cetificate/certificado-1.png",
+    color: "from-yellow-500/20 to-amber-500/20",
+  },
+  {
+    title: "SQL for Data Science",
+    issuer: "UC Davis (Coursera)",
+    recipient: "Matías Sebastian Diaz Quispe",
+    date: "Aug 29, 2024",
+    tag: "Data Analysis & SQL",
+    image: "/cetificate/certificado-2.png",
+    color: "from-pink-500/20 to-purple-500/20",
+  },
+  {
+    title: "Data Wrangling, Analysis and AB Testing with SQL",
+    issuer: "UC Davis (Coursera)",
+    recipient: "Matías Sebastian Diaz Quispe",
+    date: "Sep 14, 2024",
+    tag: "Database & Analytics",
+    image: "/cetificate/certificado-3.png",
+    color: "from-purple-500/20 to-indigo-500/20",
+  },
+  {
+    title: "Cloud Computing: AWS - Azure - Google Cloud",
+    issuer: "Universidad Nacional de Ingeniería (CTIC UNI)",
+    recipient: "MATIAS SEBASTIAN DIAZ QUISPE",
+    date: "Sep 2025",
+    tag: "Cloud Architecture",
+    image: "/cetificate/certificado-4.png",
+    color: "from-red-500/20 to-rose-500/20",
+  },
+];
+---
+
+<section id="certificates" class="py-32 px-6 relative z-10">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <span
+        class="text-xs font-mono tracking-widest text-[#f472b6] uppercase block mb-2"
+        >// FEATURED CERTIFICATES</span
+      >
+      <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+        <span class="lang-en">Certificates</span>
+        <span class="lang-es hidden">Certificados</span>
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {
+        certificates.map((cert, index) => (
+          <div class="group rounded-3xl border border-white/10 bg-[#121216]/80 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 hover:border-[#ec4899]/40 hover:shadow-xl hover:shadow-[#ec4899]/15">
+            <div class="relative overflow-hidden">
+              <img
+                src={cert.image}
+                alt={cert.title}
+                class="w-full h-52 object-cover object-top transition duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#121216] via-transparent to-transparent opacity-60" />
+              <span
+                class={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${cert.color} border border-white/10 backdrop-blur-md`}
+              >
+                {cert.tag}
+              </span>
+            </div>
+            <div class="p-6 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 class="text-lg font-bold text-white mb-2 leading-snug">
+                  {cert.title}
+                </h3>
+                <p class="text-sm font-medium text-[#f472b6] mb-4">
+                  {cert.issuer}
+                </p>
+              </div>
+              <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
+                <span>{cert.recipient}</span>
+                <div class="flex items-center gap-3">
+                  <span class="font-mono">{cert.date}</span>
+                  <button
+                    class="cert-expand-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 font-semibold text-xs transition duration-300 hover:bg-[#ec4899]/20 hover:border-[#ec4899]/50 hover:text-white cursor-pointer"
+                    data-image={cert.image}
+                    data-title={cert.title}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="15 3 21 3 21 9" />
+                      <polyline points="9 21 3 21 3 15" />
+                      <line x1="21" y1="3" x2="14" y2="10" />
+                      <line x1="3" y1="21" x2="10" y2="14" />
+                    </svg>
+                    <span class="lang-en">View</span>
+                    <span class="lang-es hidden">Ver</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+<div id="cert-lightbox" class="cert-lightbox-overlay">
+  <div class="cert-lightbox-backdrop" id="cert-lightbox-backdrop"></div>
+  <button id="cert-lightbox-close" class="cert-lightbox-close-btn">✕</button>
+  <div class="cert-lightbox-content" id="cert-lightbox-content">
+    <img id="cert-lightbox-img" src="" alt="" />
+  </div>
+</div>
+
+<style>
+  .cert-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .cert-lightbox-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cert-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .cert-lightbox-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cert-lightbox-close-btn:hover {
+    background: rgba(236, 72, 153, 0.3);
+    border-color: #ec4899;
+  }
+
+  .cert-lightbox-content {
+    position: relative;
+    z-index: 5;
+    max-width: 95vw;
+    max-height: 92vh;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cert-lightbox-overlay.is-open .cert-lightbox-content {
+    transform: scale(1);
+  }
+
+  .cert-lightbox-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    object-fit: contain;
+    display: block;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  const lightbox = document.getElementById("cert-lightbox");
+  const lightboxImg = document.getElementById(
+    "cert-lightbox-img",
+  ) as HTMLImageElement;
+  const lightboxClose = document.getElementById("cert-lightbox-close");
+  const lightboxBackdrop = document.getElementById("cert-lightbox-backdrop");
+  const lightboxContent = document.getElementById("cert-lightbox-content");
+  const expandButtons = document.querySelectorAll(".cert-expand-btn");
+
+  expandButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const imgSrc = btn.getAttribute("data-image") || "";
+      const imgTitle = btn.getAttribute("data-title") || "";
+      if (lightboxImg) {
+        lightboxImg.src = imgSrc;
+        lightboxImg.alt = imgTitle;
+      }
+      lightbox?.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  function closeLightbox() {
+    lightbox?.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  lightboxClose?.addEventListener("click", closeLightbox);
+  lightboxBackdrop?.addEventListener("click", closeLightbox);
+
+  lightboxContent?.addEventListener("click", (e) => {
+    if (e.target === lightboxContent) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+  });
+</script>
