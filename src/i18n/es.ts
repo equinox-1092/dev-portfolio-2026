@@ -1,0 +1,136 @@
+import type { Dictionary } from "./en";
+
+export const es: Dictionary = {
+  meta: {
+    title: "Matías Díaz · Ingeniero de software front-end",
+    description:
+      "Matías Díaz diseña y construye interfaces web con React, Next.js y TypeScript, con foco en rendimiento y accesibilidad.",
+  },
+  nav: {
+    label: "Principal",
+    about: "Sobre mí",
+    stack: "Stack",
+    work: "Proyectos",
+    certificates: "Certificados",
+    contact: "Contacto",
+    menu: "Menú",
+    close: "Cerrar",
+    switchTo: "Read in English",
+  },
+  intro: {
+    lines: ["Portafolio", "Matías"],
+    // Teléfonos: la palabra larga partida para que cada línea llene el ancho.
+    linesTall: ["Porta", "folio", "Matías"],
+    hint: "Desliza para entrar",
+  },
+  hero: {
+    title: "Matías Díaz, ingeniero de software front-end",
+    lead: "Ingeniero de software front-end. Construyo interfaces web rápidas y accesibles con React y TypeScript.",
+    cv: "Descargar CV (PDF)",
+    work: "Ver mis proyectos",
+    chaptersLabel: "Cómo trabajo",
+    chapters: [
+      "Lo dibujo en Figma.",
+      "Lo construyo en React.",
+      "Lo entrego accesible.",
+    ],
+  },
+  about: {
+    heading: "Sobre mí",
+    lead: "Construyo interfaces web rápidas, accesibles y fáciles de mantener.",
+    // Las palabras entre ** van en tinta plena.
+    body: "Soy Matías Díaz, estudiante de Ingeniería de Software enfocado en el **front-end**. Diseño componentes reutilizables con **React y Next.js**, los estilo con Tailwind y los prototipo en **Figma** antes de escribir código. En el back-end tengo bases en **C# y ASP.NET** y uso **MySQL y MongoDB** para modelar datos. Trabajo con Git y GitHub, con revisiones de código y metodologías ágiles. Me enfoco en resultados y tengo fortaleza en la **resolución de problemas**: soy adaptable, con una fuerte **ética de trabajo** y capacidad de sobresalir en entornos de **trabajo en equipo**. Busco seguir aprendiendo y crecer con experiencia práctica, iniciando un nuevo desafío con un equipo exitoso.",
+    facts: [
+      { label: "Rol", value: "Ingeniero de software front-end" },
+      { label: "Modalidad", value: "Remoto" },
+      { label: "Herramientas", value: "React · Next.js · TypeScript · Figma" },
+    ],
+    cta: "Escríbeme",
+    portraitAlt: "Matías Díaz bajo luz magenta, mirando su teléfono",
+  },
+  stack: {
+    heading: "Stack",
+    note: "Lo que uso todos los días y lo que uso cuando el proyecto lo pide.",
+    groups: [
+      { name: "Interfaces", tools: "React · Next.js · Astro" },
+      { name: "TypeScript", tools: "HTML · CSS · Tailwind" },
+      { name: "Diseño", tools: "Figma" },
+      { name: "Back-end", tools: "Spring Boot · C# · ASP.NET" },
+      { name: "Datos", tools: "MySQL · MongoDB" },
+    ],
+  },
+  work: {
+    heading: "Proyectos",
+    note: "Un proyecto en detalle, con una parte que puedes probar aquí mismo.",
+    year: "Año",
+    role: "Rol",
+    builtWith: "Hecho con",
+    repo: "Ver el código en GitHub",
+    cycle: "Ciclo",
+    projects: {
+      edugraph: {
+        tagline: "Planifica una carrera universitaria curso por curso.",
+        summary:
+          "Front-end en Next.js y Tailwind para planificar una carrera, organizado con ideas de Clean Architecture: presentación, lógica de aplicación y utilidades de dominio separadas. Se comunica por HTTP con un servicio FastAPI independiente que usa MySQL.",
+        role: "Desarrollador front-end",
+        mapHeading: "Pruébalo: elige un curso",
+        mapNote: "Malla de ejemplo",
+        mapIdle: "Elige un curso para ver qué tienes que aprobar antes.",
+        mapNone: "{course} no tiene prerrequisitos. Puedes llevarlo de inmediato.",
+        mapResult: "Para llevar {course} primero debes aprobar {list}.",
+        courses: {
+          math: "Matemática Básica",
+          prog: "Intro a la Programación",
+          calc: "Cálculo I",
+          algo: "Algoritmos",
+          phys: "Física I",
+          ds: "Estructuras de Datos",
+          db: "Base de Datos",
+          web: "Desarrollo Web",
+        },
+      },
+    },
+  },
+  certificates: {
+    heading: "Certificados",
+    intro: "Cursos completados en Coursera y en la UNI, de estructuras de datos a la nube.",
+    prev: "Certificado anterior",
+    next: "Certificado siguiente",
+    open: "Ver certificado",
+    close: "Cerrar",
+    position: "{n} de {total}",
+    tags: {
+      python: "Ingeniería de software",
+      sql: "Análisis de datos",
+      wrangling: "Bases de datos y analítica",
+      cloud: "Arquitectura cloud",
+    },
+  },
+  contact: {
+    heading: "Hablemos",
+    intro: "Abierto a roles front-end, freelance y colaboraciones técnicas. Trabajo en remoto.",
+    links: { github: "GitHub", linkedin: "LinkedIn", cv: "CV" },
+    form: {
+      name: "Nombre",
+      email: "Correo",
+      message: "Mensaje",
+      namePlaceholder: "Tu nombre",
+      emailPlaceholder: "tu@correo.com",
+      messagePlaceholder: "Cuéntame sobre tu proyecto",
+      send: "Enviar mensaje",
+      sending: "Enviando…",
+      success: "Mensaje enviado. Te responderé a tu correo pronto.",
+      error: "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+      network: "Error de red. Revisa tu conexión e inténtalo de nuevo.",
+      notConfigured: "El formulario aún no está configurado. Mientras tanto, escríbeme por LinkedIn.",
+      subject: "Nuevo mensaje desde tu portafolio",
+    },
+  },
+  footer: {
+    note: "Ingeniero de software front-end. Remoto, desde cualquier lugar.",
+    top: "Volver arriba",
+    rights: "Todos los derechos reservados.",
+    builtWith: "Hecho con Astro y Tailwind.",
+    elsewhere: "En otros sitios",
+  },
+};

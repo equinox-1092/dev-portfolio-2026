@@ -1,0 +1,136 @@
+export const en = {
+  meta: {
+    title: "Matías Díaz · Front-end software engineer",
+    description:
+      "Matías Díaz designs and builds web interfaces with React, Next.js and TypeScript, with a focus on performance and accessibility.",
+  },
+  nav: {
+    label: "Main",
+    about: "About",
+    stack: "Stack",
+    work: "Work",
+    certificates: "Certificates",
+    contact: "Contact",
+    menu: "Menu",
+    close: "Close",
+    switchTo: "Leer en español",
+  },
+  intro: {
+    lines: ["Portfolio", "Matías"],
+    // Phones: the long word split so every line fills the width.
+    linesTall: ["Port", "folio", "Matías"],
+    hint: "Scroll to enter",
+  },
+  hero: {
+    title: "Matías Díaz, front-end software engineer",
+    lead: "Front-end software engineer. I build fast, accessible web interfaces with React and TypeScript.",
+    cv: "Download CV (PDF)",
+    work: "See my work",
+    chaptersLabel: "How I work",
+    chapters: [
+      "I sketch it in Figma.",
+      "I build it in React.",
+      "I ship it accessible.",
+    ],
+  },
+  about: {
+    heading: "About me",
+    lead: "I build web interfaces that are fast, accessible and easy to maintain.",
+    // Words between ** are set in full ink.
+    body: "I'm Matías Díaz, a Software Engineering student focused on **front-end**. I design reusable components with **React and Next.js**, style them with Tailwind and prototype them in **Figma** before writing code. On the back end I have a foundation in **C# and ASP.NET** and use **MySQL and MongoDB** for data modelling. I work with Git and GitHub, with code reviews and agile methods. I'm results-driven and strong at **problem solving**: adaptable, with a solid **work ethic** and the ability to excel in **team-based** environments. I want to keep learning and grow through hands-on experience, taking on a new challenge with a successful team.",
+    facts: [
+      { label: "Role", value: "Front-end software engineer" },
+      { label: "Works", value: "Remotely" },
+      { label: "Tools", value: "React · Next.js · TypeScript · Figma" },
+    ],
+    cta: "Write to me",
+    portraitAlt: "Matías Díaz under magenta light, looking at his phone",
+  },
+  stack: {
+    heading: "Stack",
+    note: "What I reach for every day, and what I use when the project needs it.",
+    groups: [
+      { name: "Interfaces", tools: "React · Next.js · Astro" },
+      { name: "TypeScript", tools: "HTML · CSS · Tailwind" },
+      { name: "Design", tools: "Figma" },
+      { name: "Back-end", tools: "Spring Boot · C# · ASP.NET" },
+      { name: "Data", tools: "MySQL · MongoDB" },
+    ],
+  },
+  work: {
+    heading: "Work",
+    note: "One project in depth, with a piece of it you can try right here.",
+    year: "Year",
+    role: "Role",
+    builtWith: "Built with",
+    repo: "View the code on GitHub",
+    cycle: "Term",
+    projects: {
+      edugraph: {
+        tagline: "Plan a university degree course by course.",
+        summary:
+          "A Next.js and Tailwind front end for planning a degree, organised with Clean Architecture ideas: presentation, application logic and domain utilities kept apart. It talks over HTTP to a standalone FastAPI service backed by MySQL.",
+        role: "Front-end developer",
+        mapHeading: "Try it: pick a course",
+        mapNote: "Sample curriculum",
+        mapIdle: "Pick a course to see what you have to pass first.",
+        mapNone: "{course} has no prerequisites. You can take it right away.",
+        mapResult: "To take {course} you first have to pass {list}.",
+        courses: {
+          math: "Basic Mathematics",
+          prog: "Intro to Programming",
+          calc: "Calculus I",
+          algo: "Algorithms",
+          phys: "Physics I",
+          ds: "Data Structures",
+          db: "Databases",
+          web: "Web Development",
+        },
+      },
+    },
+  },
+  certificates: {
+    heading: "Certificates",
+    intro: "Courses completed on Coursera and at UNI, from data structures to the cloud.",
+    prev: "Previous certificate",
+    next: "Next certificate",
+    open: "View certificate",
+    close: "Close",
+    position: "{n} of {total}",
+    tags: {
+      python: "Software engineering",
+      sql: "Data analysis",
+      wrangling: "Databases and analytics",
+      cloud: "Cloud architecture",
+    },
+  },
+  contact: {
+    heading: "Let's talk",
+    intro: "Open to front-end roles, freelance work and technical collaborations. I work remotely.",
+    links: { github: "GitHub", linkedin: "LinkedIn", cv: "CV" },
+    form: {
+      name: "Name",
+      email: "Email",
+      message: "Message",
+      namePlaceholder: "Your name",
+      emailPlaceholder: "you@example.com",
+      messagePlaceholder: "Tell me about your project",
+      send: "Send message",
+      sending: "Sending…",
+      success: "Message sent. I'll reply to your email soon.",
+      error: "The message could not be sent. Please try again.",
+      network: "Network error. Check your connection and try again.",
+      notConfigured: "The form is not configured yet. Reach me on LinkedIn in the meantime.",
+      subject: "New message from your portfolio",
+    },
+  },
+  footer: {
+    note: "Front-end software engineer. Remote, from anywhere.",
+    top: "Back to top",
+    rights: "All rights reserved.",
+    builtWith: "Built with Astro and Tailwind.",
+    elsewhere: "Elsewhere",
+  },
+};
+
+export type Dictionary = typeof en;

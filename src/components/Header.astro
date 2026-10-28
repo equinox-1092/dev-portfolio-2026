@@ -1,0 +1,146 @@
+---
+import { getDictionary, localePath, type Locale } from "../i18n";
+import { site } from "../data/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const other: Locale = locale === "en" ? "es" : "en";
+
+const links = [
+  { href: "#about", label: t.nav.about },
+  { href: "#stack", label: t.nav.stack },
+  { href: "#work", label: t.nav.work },
+  { href: "#certificates", label: t.nav.certificates },
+  { href: "#contact", label: t.nav.contact },
+];
+---
+
+<header
+  class="site-header fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)]"
+  data-header
+>
+  <div class="flex h-16 items-center justify-between gap-6 px-gutter">
+    <a href="#top" class="font-black uppercase tracking-tight text-ink">
+      {site.name}
+    </a>
+
+    <nav aria-label={t.nav.label} class="hidden lg:block">
+      <ul class="flex items-center gap-7 font-bold text-small">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} class="nav-link" data-nav={link.href.slice(1)}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={localePath(other)}
+        hreflang={other}
+        lang={other}
+        aria-label={t.nav.switchTo}
+        class="grid h-11 min-w-11 place-items-center px-2 font-bold text-small uppercase transition-colors hover:text-accent"
+      >
+        {other}
+      </a>
+      <button
+        type="button"
+        class="h-11 bg-ink px-4 font-bold text-small text-bg lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-toggle
+        data-open-label={t.nav.menu}
+        data-close-label={t.nav.close}
+      >
+        {t.nav.menu}
+      </button>
+    </div>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    aria-label={t.nav.label}
+    class="mobile-nav bg-bg px-gutter pb-8 lg:hidden"
+    hidden
+  >
+    <ul class="flex flex-col">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="display block py-2 text-[clamp(2.5rem,12vw,4rem)]">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  /* Over the hero the footage's scrim carries the bar; past it the bar takes the page ground. */
+  .site-header {
+    background-color: transparent;
+    transition:
+      background-color 200ms ease,
+      transform 500ms var(--ease-out),
+      opacity 400ms var(--ease-out);
+  }
+  /* Hidden during the intro; slides down when the hero opens, or when a key press moves focus into it. */
+  .site-header[data-away]:not(:focus-within) {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: 200ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header[data-away]:not(:focus-within) {
+      transform: none;
+    }
+  }
+  .site-header[data-solid] {
+    background-color: var(--color-bg);
+  }
+
+  .nav-link {
+    position: relative;
+    padding-block: 0.5rem;
+    transition: color 200ms ease;
+  }
+  .nav-link[aria-current="true"] {
+    color: var(--color-accent);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-link:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .mobile-nav:not([hidden]) {
+    animation: menu-in 240ms var(--ease-out);
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-nav:not([hidden]) {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/header";
+</script>

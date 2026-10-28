@@ -1,0 +1,143 @@
+---
+import { getDictionary, type Locale } from "../i18n";
+import { site } from "../data/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const year = new Date().getFullYear();
+
+const sections = [
+  { href: "#about", label: t.nav.about },
+  { href: "#stack", label: t.nav.stack },
+  { href: "#work", label: t.nav.work },
+  { href: "#certificates", label: t.nav.certificates },
+  { href: "#contact", label: t.nav.contact },
+];
+const elsewhere = [
+  { href: site.github, label: "GitHub", external: true },
+  { href: site.linkedin, label: "LinkedIn", external: true },
+  { href: site.cv, label: t.contact.links.cv, download: true },
+];
+---
+
+<!-- A designed close: what this is, where to go, and the name returning at full width. -->
+<footer class="site-footer bg-accent px-gutter pt-12 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-accent-ink sm:pt-16">
+  <div class="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-12 lg:gap-x-10">
+    <p class="footer-note col-span-2 lg:col-span-5">{t.footer.note}</p>
+
+    <nav aria-label={t.nav.label} class="lg:col-span-2 lg:col-start-7">
+      <ul class="footer-list">
+        {sections.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label={t.footer.elsewhere} class="lg:col-span-2">
+      <ul class="footer-list">
+        {
+          elsewhere.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(link.download ? { download: "" } : {})}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="col-span-2 lg:text-right">
+      <a href="#top" class="footer-top">{t.footer.top}</a>
+    </div>
+  </div>
+
+  <p class="footer-name display" aria-hidden="true">{site.name}</p>
+
+  <div class="mt-6 flex flex-col gap-1 text-small font-bold sm:flex-row sm:justify-between">
+    <p>© {year} {site.name}. {t.footer.rights}</p>
+    <p>{t.footer.builtWith}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    overflow: clip;
+    container-type: inline-size;
+  }
+
+  .footer-note {
+    max-width: 24ch;
+    font-size: var(--text-lead);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .footer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-weight: 700;
+  }
+  .footer-list a,
+  .footer-top {
+    display: inline-block;
+    padding-block: 0.25rem;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 200ms ease;
+  }
+  .footer-top {
+    font-weight: 700;
+    text-decoration-color: currentColor;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .footer-list a:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+  .footer-list a:focus-visible,
+  .footer-top:focus-visible {
+    outline-color: var(--color-accent-ink);
+  }
+  .site-footer ::selection {
+    background: var(--color-accent-ink);
+    color: var(--color-accent);
+  }
+
+  /* The name spans the footer exactly, gutter to gutter. "MATÍAS DÍAZ" in Chivo Black is ~6.3em wide. */
+  .footer-name {
+    margin-top: clamp(4rem, 10vw, 9rem);
+    font-size: calc(100cqi / 6.45);
+    line-height: 0.8;
+    white-space: nowrap;
+    transform-origin: 0 100%;
+  }
+
+  /* The name settles into place as the footer scrolls in (scroll-driven, off the main thread). */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .footer-name {
+        animation: settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+      @keyframes settle {
+        from {
+          transform: scale(0.92);
+          opacity: 0.35;
+        }
+      }
+    }
+  }
+</style>

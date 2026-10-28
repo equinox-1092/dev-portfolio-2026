@@ -1,134 +1,158 @@
 ---
+import { getDictionary, type Locale } from "../i18n";
+import { site } from "../data/site";
 
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+// Odd segments were wrapped in ** and are set in full ink.
+const parts = t.about.body.split("**");
 ---
 
-<section id="about" class="py-32 px-6 relative z-10">
-  <div class="max-w-6xl mx-auto">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      <div class="lg:col-span-5 flex justify-center">
-        <div class="relative group max-w-sm w-full">
-          <div
-            class="absolute -inset-1 bg-gradient-to-r from-[#ec4899] to-[#8b5cf6] rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition duration-500"
-          >
-          </div>
-          <div
-            class="relative rounded-3xl overflow-hidden border border-white/10 bg-[#121216] shadow-2xl"
-          >
-            <img
-              src="/hero/ezgif-frame-001.png"
-              alt="Matias Diaz"
-              class="w-full h-[420px] object-cover object-center filter contrast-105 saturate-105 group-hover:scale-105 transition duration-500"
-            />
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-[#07070a] via-transparent to-transparent opacity-80"
-            >
-            </div>
-            <div class="absolute bottom-6 left-6 right-6">
-              <span
-                class="text-xs font-mono tracking-widest text-[#f472b6] uppercase block mb-1"
-                >Matias Diaz</span
-              >
-              <span class="text-sm font-semibold text-gray-300"
-                >Front-end Software Engineer</span
-              >
-            </div>
-          </div>
-        </div>
+<section id="about" class="px-gutter py-section">
+  <div class="grid gap-x-10 gap-y-10 lg:grid-cols-12 lg:gap-y-0">
+    <h2 class="display text-head lg:col-span-6 lg:col-start-7" data-settle>{t.about.heading}</h2>
+
+    <figure class="portrait lg:col-span-5 lg:col-start-1 lg:row-span-2 lg:row-start-1" data-reveal>
+      <div class="portrait-frame">
+        <img
+          src={site.portrait.src}
+          width={site.portrait.width}
+          height={site.portrait.height}
+          alt={t.about.portraitAlt}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
-      <div class="lg:col-span-7">
-        <div
-          class="p-8 md:p-10 rounded-3xl border border-white/10 bg-[#121216]/80 backdrop-blur-xl shadow-2xl"
-        >
-          <h2
-            class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight"
-          >
-            <span class="lang-en">About me</span>
-            <span class="lang-es hidden">Sobre mí</span>
-          </h2>
-          <h3 class="text-lg font-semibold text-[#f472b6] mb-6">
-            <span class="lang-en">Who am I?</span>
-            <span class="lang-es hidden">¿Quién soy?</span>
-          </h3>
-          <div
-            class="text-gray-300 text-base md:text-lg leading-relaxed space-y-4 mb-8 font-light"
-          >
-            <p class="lang-en">
-              I work as a front-end software engineer, I design and build
-              powerful interfaces and reusable components using React and
-              Next.js. I also use Tailwind for styling and Figma for software
-              prototyping. I have fundamental back-end knowledge in C# and
-              ASP.NET, as well as practical use of MySQL and MongoDB databases
-              for CRUD operations and basic modeling. I work with Git and GitHub
-              for collaborative workflows and continuous integration. I focus on
-              performance, accessibility, and delivering maintainable solutions.
-              I also enjoy solving complex problems and collaborating with
-              multidisciplinary teams, participating in code reviews and agile
-              methodologies to achieve common goals and continuously improve.
-            </p>
-            <p class="lang-es hidden">
-              Trabajo como ingeniero de software front-end, diseño y construyo
-              interfaces potentes y componentes reutilizables utilizando React y
-              Next.js. También uso Tailwind para estilos y Figma para el
-              prototipado de software. Tengo conocimientos fundamentales de
-              back-end en C# y ASP.NET, así como uso práctico de bases de datos
-              MySQL y MongoDB para operaciones CRUD y modelado básico. Trabajo
-              con Git y GitHub para flujos de trabajo colaborativos e
-              integración continua. Me enfoco en el rendimiento, la
-              accesibilidad y la entrega de soluciones mantenibles. También me
-              gusta resolver problemas complejos y colaborar con equipos
-              multidisciplinarios, participando en revisiones de código y
-              metodologías ágiles para lograr objetivos comunes y mejorar
-              continuamente.
-            </p>
-          </div>
-          <div
-            class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#00d8ff]/10 border border-[#00d8ff]/30 text-[#00d8ff] font-medium text-sm"
-          >
-            <svg
-              class="w-5 h-5 animate-spin-slow"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="9"
-                ry="3.5"
-                transform="rotate(30 12 12)"></ellipse>
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="9"
-                ry="3.5"
-                transform="rotate(90 12 12)"></ellipse>
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="9"
-                ry="3.5"
-                transform="rotate(150 12 12)"></ellipse>
-              <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
-            </svg>
-            <span class="italic font-semibold">Team React</span>
-          </div>
-        </div>
+    </figure>
+
+    <div class="lg:col-span-6 lg:col-start-7 lg:mt-8" data-reveal>
+      <p class="about-lead" data-settle>{t.about.lead}</p>
+
+      <p class="about-body mt-6" data-settle>
+        {parts.map((part, i) => (i % 2 ? <strong>{part}</strong> : part))}
+      </p>
+
+      <dl class="facts mt-12" data-settle>
+        {
+          t.about.facts.map((fact) => (
+            <div class="fact">
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="mt-12 flex flex-wrap gap-3" data-settle>
+        <a href="#contact" class="btn">{t.about.cta}</a>
+        <a href={site.cv} download class="btn btn-ghost">{t.hero.cv}</a>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .animate-spin-slow {
-    animation: spin 12s linear infinite;
+  .portrait {
+    align-self: start;
   }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
+  @media (min-width: 64rem) {
+    .portrait {
+      position: sticky;
+      top: 6rem;
     }
   }
-  .hidden {
-    display: none !important;
+  .portrait-frame {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+  .portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 52% 35%;
+  }
+  @media (max-width: 63.99rem) {
+    .portrait-frame {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* The portrait opens upward like a blind, the picture settling inside it. */
+  :global(.js) .portrait[data-reveal] > .portrait-frame {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1100ms var(--ease-in-out);
+  }
+  :global(.js) .portrait[data-reveal] img {
+    transform: scale(1.12);
+    transition: transform 1400ms var(--ease-out);
+  }
+  :global(.js) .portrait[data-reveal].is-in > .portrait-frame {
+    clip-path: inset(0);
+  }
+  :global(.js) .portrait[data-reveal].is-in img {
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .portrait[data-reveal] > .portrait-frame {
+      clip-path: none;
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+    :global(.js) .portrait[data-reveal].is-in > .portrait-frame {
+      opacity: 1;
+    }
+    :global(.js) .portrait[data-reveal] img {
+      transform: none;
+    }
+  }
+
+  /* Three voices: the lead says it, the body explains it, the facts let a scanner check it. */
+  .about-lead {
+    max-width: 24ch;
+    font-size: clamp(1.5rem, 1.05rem + 1.6vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  .about-body {
+    max-width: 58ch;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+  .about-body strong {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  .facts {
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 40rem) {
+    .facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .fact {
+    padding: 1rem 1.125rem 1.125rem;
+    background: var(--color-surface);
+  }
+  .fact dt {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+  }
+  .fact dd {
+    margin-top: 0.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
   }
 </style>
