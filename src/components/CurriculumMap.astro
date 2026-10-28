@@ -1,0 +1,107 @@
+---
+import type { Dictionary } from "../i18n";
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+  cycleLabel: string;
+  copy: Dictionary["work"]["projects"][Project["id"]];
+}
+
+const { project, cycleLabel, copy } = Astro.props;
+const curriculum = project.curriculum ?? [];
+const cycles = [...new Set(curriculum.map((c) => c.cycle))].sort((a, b) => a - b);
+---
+
+<!-- A working piece of the product: pick a course, see its prerequisite chain. -->
+<figure data-ui data-curriculum class="bg-bg p-5 text-ink sm:p-8">
+  <figcaption class="flex flex-wrap items-baseline justify-between gap-2">
+    <span class="text-lead font-black">{copy.mapHeading}</span>
+    <span class="text-small font-bold text-muted">{copy.mapNote}</span>
+  </figcaption>
+
+  <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+    {
+      cycles.map((cycle) => (
+        <div>
+          <p class="mb-2 text-small font-bold text-muted">
+            {cycleLabel} {cycle}
+          </p>
+          <ul class="flex flex-col gap-2">
+            {curriculum
+              .filter((course) => course.cycle === cycle)
+              .map((course) => (
+                <li>
+                  <button
+                    type="button"
+                    class="course"
+                    aria-pressed="false"
+                    data-course={course.id}
+                    data-cycle={course.cycle}
+                    data-requires={course.requires.join(" ")}
+                  >
+                    {copy.courses[course.id]}
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+
+  <p
+    class="mt-6 min-h-[3em] font-bold"
+    aria-live="polite"
+    data-result
+    data-idle={copy.mapIdle}
+    data-none={copy.mapNone}
+    data-template={copy.mapResult}
+  >
+    {copy.mapIdle}
+  </p>
+</figure>
+
+<style>
+  .course {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: var(--text-small);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      transform 140ms var(--ease-out);
+  }
+  .course:active {
+    transform: scale(0.97);
+  }
+  .course[data-state="required"] {
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+  .course[aria-pressed="true"] {
+    background: var(--color-ink);
+    color: var(--color-bg);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .course:not([aria-pressed="true"]):not([data-state="required"]):hover {
+      background: #2c2028;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .course {
+      transition-delay: 0ms !important;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/curriculum";
+</script>

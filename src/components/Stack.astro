@@ -1,0 +1,85 @@
+---
+import { getDictionary, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<section id="stack" class="bg-surface px-gutter py-section">
+  <div class="mb-12 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3 sm:mb-16" data-settle>
+    <h2 class="display text-head">{t.stack.heading}</h2>
+    <p class="max-w-[40ch] text-body text-muted">{t.stack.note}</p>
+  </div>
+
+  <ul data-reveal>
+    {
+      t.stack.groups.map((group) => (
+        <li class="stack-line" data-settle>
+          <span class="display stack-name">{group.name}</span>
+          <span class="stack-tools">{group.tools}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .stack-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: 2rem;
+  }
+  .stack-name {
+    font-size: var(--text-poster);
+    line-height: 0.95;
+    transform-origin: 0 100%;
+    transition:
+      color 200ms ease,
+      opacity 200ms ease,
+      scale 250ms var(--ease-out);
+  }
+  .stack-tools {
+    font-size: var(--text-lead);
+    font-weight: 700;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    transition: opacity 200ms ease;
+  }
+
+  /* Hover pulls one line forward and lets the rest recede. `scale` (not transform) so it
+     composes with the scroll animation below instead of being overridden by it. */
+  @media (hover: hover) and (pointer: fine) {
+    .stack-line:hover .stack-name {
+      color: var(--color-accent);
+      scale: 1.04;
+    }
+    ul:has(.stack-line:hover) .stack-line:not(:hover) > * {
+      opacity: 0.3;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stack-line:hover .stack-name {
+      scale: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .stack-line {
+      flex-direction: column;
+      margin-bottom: 1.25rem;
+    }
+    .stack-name {
+      font-size: 12vw;
+    }
+    .stack-tools {
+      font-size: var(--text-body);
+      margin-top: 0.25rem;
+    }
+  }
+</style>

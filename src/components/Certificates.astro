@@ -1,243 +1,226 @@
 ---
-const certificates = [
-  {
-    title: "Python Data Structures",
-    issuer: "University of Michigan (Coursera)",
-    recipient: "Matías Sebastian Diaz Quispe",
-    date: "May 10, 2025",
-    tag: "Software Engineering",
-    image: "/cetificate/certificado-1.png",
-    color: "from-yellow-500/20 to-amber-500/20",
-  },
-  {
-    title: "SQL for Data Science",
-    issuer: "UC Davis (Coursera)",
-    recipient: "Matías Sebastian Diaz Quispe",
-    date: "Aug 29, 2024",
-    tag: "Data Analysis & SQL",
-    image: "/cetificate/certificado-2.png",
-    color: "from-pink-500/20 to-purple-500/20",
-  },
-  {
-    title: "Data Wrangling, Analysis and AB Testing with SQL",
-    issuer: "UC Davis (Coursera)",
-    recipient: "Matías Sebastian Diaz Quispe",
-    date: "Sep 14, 2024",
-    tag: "Database & Analytics",
-    image: "/cetificate/certificado-3.png",
-    color: "from-purple-500/20 to-indigo-500/20",
-  },
-  {
-    title: "Cloud Computing: AWS - Azure - Google Cloud",
-    issuer: "Universidad Nacional de Ingeniería (CTIC UNI)",
-    recipient: "MATIAS SEBASTIAN DIAZ QUISPE",
-    date: "Sep 2025",
-    tag: "Cloud Architecture",
-    image: "/cetificate/certificado-4.png",
-    color: "from-red-500/20 to-rose-500/20",
-  },
-];
+import { fmt, getDictionary, type Locale } from "../i18n";
+import { certificates, formatCertificateDate } from "../data/certificates";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const total = certificates.length;
+const items = certificates.map((cert, i) => ({
+  ...cert,
+  tag: t.certificates.tags[cert.id],
+  meta: `${cert.issuer} · ${formatCertificateDate(cert.date, locale)}`,
+  position: fmt(t.certificates.position, { n: i + 1, total }),
+}));
+const first = items[0];
 ---
 
-<section id="certificates" class="py-32 px-6 relative z-10">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <span
-        class="text-xs font-mono tracking-widest text-[#f472b6] uppercase block mb-2"
-        >// FEATURED CERTIFICATES</span
-      >
-      <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-        <span class="lang-en">Certificates</span>
-        <span class="lang-es hidden">Certificados</span>
-      </h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<section id="certificates" class="overflow-clip bg-surface py-section">
+  <div class="mb-10 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3 px-gutter sm:mb-14" data-settle>
+    <h2 class="display text-head">{t.certificates.heading}</h2>
+    <p class="max-w-[42ch] text-muted">{t.certificates.intro}</p>
+  </div>
+
+  <!-- Certificates sit on the rim of a large wheel; turning it brings one to the top. -->
+  <div class="wheel-stage" data-wheel-stage>
+    <ul class="wheel" data-wheel>
       {
-        certificates.map((cert, index) => (
-          <div class="group rounded-3xl border border-white/10 bg-[#121216]/80 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 hover:border-[#ec4899]/40 hover:shadow-xl hover:shadow-[#ec4899]/15">
-            <div class="relative overflow-hidden">
+        items.map((cert, i) => (
+          <li class="wheel-slot" style={`--i: ${i}`}>
+            <button
+              type="button"
+              class="wheel-card"
+              aria-label={`${cert.title}, ${cert.position}`}
+              aria-current={i === 0 ? "true" : undefined}
+              data-far={i > 2 ? "" : undefined}
+              tabindex={i === 0 ? 0 : -1}
+              data-title={cert.title}
+              data-tag={cert.tag}
+              data-meta={cert.meta}
+              data-position={cert.position}
+              data-image={cert.image}
+              data-width={cert.width}
+              data-height={cert.height}
+            >
               <img
                 src={cert.image}
-                alt={cert.title}
-                class="w-full h-52 object-cover object-top transition duration-500 group-hover:scale-105"
+                width={cert.width}
+                height={cert.height}
+                alt=""
                 loading="lazy"
+                decoding="async"
+                draggable="false"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#121216] via-transparent to-transparent opacity-60" />
-              <span
-                class={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${cert.color} border border-white/10 backdrop-blur-md`}
-              >
-                {cert.tag}
-              </span>
-            </div>
-            <div class="p-6 flex flex-col flex-1 justify-between">
-              <div>
-                <h3 class="text-lg font-bold text-white mb-2 leading-snug">
-                  {cert.title}
-                </h3>
-                <p class="text-sm font-medium text-[#f472b6] mb-4">
-                  {cert.issuer}
-                </p>
-              </div>
-              <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
-                <span>{cert.recipient}</span>
-                <div class="flex items-center gap-3">
-                  <span class="font-mono">{cert.date}</span>
-                  <button
-                    class="cert-expand-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 font-semibold text-xs transition duration-300 hover:bg-[#ec4899]/20 hover:border-[#ec4899]/50 hover:text-white cursor-pointer"
-                    data-image={cert.image}
-                    data-title={cert.title}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <polyline points="15 3 21 3 21 9" />
-                      <polyline points="9 21 3 21 3 15" />
-                      <line x1="21" y1="3" x2="14" y2="10" />
-                      <line x1="3" y1="21" x2="10" y2="14" />
-                    </svg>
-                    <span class="lang-en">View</span>
-                    <span class="lang-es hidden">Ver</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            </button>
+          </li>
         ))
       }
+    </ul>
+  </div>
+
+  <div class="mx-auto mt-6 flex max-w-[44rem] flex-col items-center gap-6 px-gutter text-center">
+    <div aria-live="polite" data-wheel-caption>
+      <p class="text-small font-bold text-accent">
+        <span data-field="tag">{first.tag}</span> · <span data-field="position">{first.position}</span>
+      </p>
+      <h3 class="cert-title mt-2 text-lead font-black leading-tight" data-field="title">{first.title}</h3>
+      <p class="mt-1 text-muted" data-field="meta">{first.meta}</p>
+    </div>
+    <div class="flex justify-center gap-3">
+      <button type="button" class="btn btn-ghost icon-btn" aria-label={t.certificates.prev} data-wheel-prev disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+      </button>
+      <button type="button" class="btn" data-wheel-open>{t.certificates.open}</button>
+      <button type="button" class="btn btn-ghost icon-btn" aria-label={t.certificates.next} data-wheel-next>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+      </button>
     </div>
   </div>
+
+  <dialog class="cert-dialog" data-cert-dialog aria-label={first.title}>
+    <form method="dialog" class="flex justify-end">
+      <button class="btn btn-ghost">{t.certificates.close}</button>
+    </form>
+    <img src={first.image} width={first.width} height={first.height} alt={first.title} data-cert-dialog-img />
+  </dialog>
 </section>
-<div id="cert-lightbox" class="cert-lightbox-overlay">
-  <div class="cert-lightbox-backdrop" id="cert-lightbox-backdrop"></div>
-  <button id="cert-lightbox-close" class="cert-lightbox-close-btn">✕</button>
-  <div class="cert-lightbox-content" id="cert-lightbox-content">
-    <img id="cert-lightbox-img" src="" alt="" />
-  </div>
-</div>
 
 <style>
-  .cert-lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+  /* Geometry: card width, radius as a multiple of it (--k) and the angle between cards.
+     scripts/certificates.ts reads --k and --step, so change them only here. */
+  .wheel-stage {
+    --w: min(78vw, 32rem);
+    --h: calc(var(--w) * 0.775);
+    --k: 2.6;
+    --r: calc(var(--w) * var(--k));
+    --step: 24deg;
+    position: relative;
+    height: calc(var(--h) + var(--w) * 0.24 + 1rem);
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .wheel-stage.is-dragging {
+    cursor: grabbing;
+  }
+
+  .wheel {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--h) / 2 + var(--r));
+    width: 0;
+    height: 0;
+    transition: transform 650ms var(--ease-out);
+  }
+  .is-dragging .wheel {
+    transition: none;
+  }
+
+  .wheel-slot {
+    position: absolute;
+    left: calc(var(--w) / -2);
+    top: calc(var(--h) / -2);
+    width: var(--w);
+    height: var(--h);
+    transform: rotate(calc(var(--i) * var(--step))) translateY(calc(var(--r) * -1));
+  }
+
+  .wheel-card {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.4;
+    transform: scale(0.86);
+    transition:
+      transform 450ms var(--ease-out),
+      opacity 450ms ease;
+  }
+  .wheel-card[aria-current="true"] {
+    opacity: 1;
+    transform: none;
+  }
+  .wheel-card[data-far] {
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.35s ease;
+  }
+  .wheel-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    pointer-events: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .wheel-card:not([aria-current="true"]):not([data-far]):hover {
+      opacity: 0.7;
+    }
   }
 
-  .cert-lightbox-overlay.is-open {
-    opacity: 1;
-    pointer-events: auto;
+  .cert-title {
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
-  .cert-lightbox-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  .cert-lightbox-close-btn {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 10;
+  .icon-btn {
     width: 3rem;
-    height: 3rem;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 0;
+  }
+  .icon-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: square;
+  }
+  .icon-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
   }
 
-  .cert-lightbox-close-btn:hover {
-    background: rgba(236, 72, 153, 0.3);
-    border-color: #ec4899;
+  .cert-dialog {
+    margin: auto;
+    max-width: min(96vw, 80rem);
+    padding: 0;
+    background: transparent;
+    color: var(--color-ink);
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 220ms ease-out,
+      transform 220ms var(--ease-out);
   }
-
-  .cert-lightbox-content {
-    position: relative;
-    z-index: 5;
-    max-width: 95vw;
-    max-height: 92vh;
-    transform: scale(0.9);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  @starting-style {
+    .cert-dialog[open] {
+      opacity: 0;
+      transform: scale(0.96);
+    }
   }
-
-  .cert-lightbox-overlay.is-open .cert-lightbox-content {
-    transform: scale(1);
+  .cert-dialog::backdrop {
+    background: rgb(14 10 13 / 0.94);
   }
-
-  .cert-lightbox-content img {
-    max-width: 100%;
-    max-height: 90vh;
+  .cert-dialog img {
+    display: block;
     width: auto;
     height: auto;
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    object-fit: contain;
-    display: block;
+    max-width: 100%;
+    max-height: calc(100svh - 7rem);
+    margin-top: 0.75rem;
+    background: #fff;
   }
 
-  .hidden {
-    display: none !important;
+  @media (prefers-reduced-motion: reduce) {
+    .wheel,
+    .wheel-card,
+    .cert-dialog {
+      transition: opacity 200ms ease;
+    }
   }
 </style>
 
 <script>
-  const lightbox = document.getElementById("cert-lightbox");
-  const lightboxImg = document.getElementById(
-    "cert-lightbox-img",
-  ) as HTMLImageElement;
-  const lightboxClose = document.getElementById("cert-lightbox-close");
-  const lightboxBackdrop = document.getElementById("cert-lightbox-backdrop");
-  const lightboxContent = document.getElementById("cert-lightbox-content");
-  const expandButtons = document.querySelectorAll(".cert-expand-btn");
-
-  expandButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const imgSrc = btn.getAttribute("data-image") || "";
-      const imgTitle = btn.getAttribute("data-title") || "";
-      if (lightboxImg) {
-        lightboxImg.src = imgSrc;
-        lightboxImg.alt = imgTitle;
-      }
-      lightbox?.classList.add("is-open");
-      document.body.style.overflow = "hidden";
-    });
-  });
-
-  function closeLightbox() {
-    lightbox?.classList.remove("is-open");
-    document.body.style.overflow = "";
-  }
-
-  lightboxClose?.addEventListener("click", closeLightbox);
-  lightboxBackdrop?.addEventListener("click", closeLightbox);
-
-  lightboxContent?.addEventListener("click", (e) => {
-    if (e.target === lightboxContent) closeLightbox();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightbox();
-  });
+  import "../scripts/certificates";
 </script>

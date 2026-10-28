@@ -1,0 +1,234 @@
+---
+import { getDictionary, type Locale } from "../i18n";
+import { site } from "../data/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const { framePrefix, frameCount, width, height } = site.hero;
+---
+
+<!--
+  Tall section with a pinned screen. The first 1.4 screens of scroll fly into the intro title
+  (scripts/intro.ts); the rest scrubs the footage (scripts/hero.ts).
+-->
+<section
+  id="top"
+  class="hero relative"
+  data-hero
+  data-prefix={framePrefix}
+  data-frames={frameCount}
+  data-intro-screens="1.4"
+>
+  <div class="sticky top-0 h-svh overflow-hidden">
+    <img
+      src={`${framePrefix}001.webp`}
+      width={width}
+      height={height}
+      alt=""
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <canvas class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+    <div class="scrim absolute inset-0" aria-hidden="true"></div>
+
+    <div class="hero-ui relative flex h-full flex-col px-gutter pt-28 sm:pt-32">
+      <!-- Intro and chapters share one place: the intro steps aside, then each chapter takes its turn. -->
+      <div class="hero-stack">
+        <div class="hero-copy">
+          <p class="max-w-[30ch] text-lead font-bold leading-snug text-ink">{t.hero.lead}</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={site.cv} download class="btn">{t.hero.cv}</a>
+            <a href="#work" class="btn btn-ghost">{t.hero.work}</a>
+          </div>
+        </div>
+
+        <ol class="chapters" aria-label={t.hero.chaptersLabel}>
+          {t.hero.chapters.map((line) => <li class="chapter" data-chapter>{line}</li>)}
+        </ol>
+      </div>
+
+      <p class="hero-word display" data-hero-word aria-hidden="true"><span>Matías</span></p>
+    </div>
+
+    <!-- The title as a window onto the footage. Purely visual: the h1 below carries the name. -->
+    <div class="intro absolute inset-0" data-intro aria-hidden="true">
+      <!-- Wide screens use `lines`, tall (phone) screens `linesTall`; the script picks one. -->
+      <canvas
+        class="h-full w-full"
+        data-intro-canvas
+        data-wide={JSON.stringify(t.intro.lines)}
+        data-tall={JSON.stringify(t.intro.linesTall)}
+      ></canvas>
+    </div>
+
+    <!-- The page title, legible from the first frame; it fades (not hides) so assistive tech keeps it. -->
+    <div class="intro-foot" data-intro-foot>
+      <h1 class="intro-title">{t.hero.title}</h1>
+      <p class="intro-hint" aria-hidden="true">{t.intro.hint}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    height: 440svh;
+  }
+
+  /* Neutral scrim so the type reads over the footage. */
+  .scrim {
+    background: linear-gradient(to top, rgb(14 10 13 / 0.9), rgb(14 10 13 / 0.15) 55%, rgb(14 10 13 / 0.7)); /* taste-skill-ignore */
+  }
+
+  /* Intro: only exists with JS and motion; without either, the hero shows as is. */
+  .intro {
+    display: none;
+  }
+  :global(.js) .intro {
+    display: block;
+  }
+  /* Its own layer: the last stretch of the zoom is a compositor scale (see scripts/intro.ts). */
+  .intro canvas {
+    will-change: transform;
+  }
+  .intro-foot {
+    position: absolute;
+    inset-inline: 0;
+    bottom: max(2rem, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: var(--spacing-gutter);
+    text-align: center;
+  }
+  .intro-title {
+    max-width: 28ch;
+    font-size: var(--text-lead);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    animation: hint-in 700ms 150ms var(--ease-out) both;
+  }
+  /* Without the intro (no JS, or reduced motion) the title stays for assistive tech only. */
+  :global(html:not(.js)) .intro-foot {
+    position: absolute;
+    width: 1px;
+    height: 1px; /* screen-reader-only clip, not a rule. taste-skill-ignore */
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .intro-hint {
+    font-weight: 700;
+    font-size: var(--text-small);
+    color: var(--color-muted);
+    animation: hint-in 600ms 400ms var(--ease-out) both;
+  }
+  @keyframes hint-in {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
+
+  /* Inside the letters the footage shows at full strength; the scrim comes in with the hero type. */
+  .scrim {
+    transition: opacity 600ms var(--ease-out);
+  }
+  :global(.js) .hero:not([data-revealed]) .scrim {
+    opacity: 0;
+  }
+
+  /* The hero's own type arrives as the intro opens, and leaves if the visitor scrolls back into it. */
+  .hero-copy,
+  .hero-word {
+    transition:
+      opacity 600ms var(--ease-out),
+      translate 700ms var(--ease-out);
+  }
+  .hero-word {
+    transition-delay: 100ms;
+  }
+  :global(.js) .hero:not([data-revealed]) .hero-ui {
+    visibility: hidden;
+    transition: visibility 0s 300ms;
+  }
+  :global(.js) .hero:not([data-revealed]) :is(.hero-copy, .hero-word) {
+    opacity: 0;
+    translate: 0 32px;
+    transition-duration: 300ms;
+    transition-delay: 0ms;
+  }
+
+  .hero-stack,
+  .chapters {
+    display: grid;
+  }
+  .hero-stack > *,
+  .chapter {
+    grid-area: 1 / 1;
+  }
+  .chapter {
+    max-width: 13ch;
+    font-size: clamp(2rem, 1.2rem + 3.6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  :global(.js) .chapter {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* The name spans the frame exactly, gutter to gutter: sized from the container, not the viewport,
+     so a desktop scrollbar can never push it off screen. "MATÍAS" in Chivo Black is ~3.85em wide. */
+  .hero-ui {
+    container-type: inline-size;
+  }
+  .hero-word {
+    position: absolute;
+    left: var(--spacing-gutter);
+    bottom: calc(var(--spacing-gutter) * 0.75);
+    font-size: calc(100cqi / 3.86);
+    line-height: 0.8;
+    white-space: nowrap;
+    color: var(--color-ink);
+    transform-origin: 0 100%;
+    pointer-events: none;
+  }
+
+  /* Reduced motion: no intro flight, no scrubbing, no scroll story. The hero is one still screen. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      height: 100svh;
+    }
+    .intro,
+    .chapters {
+      display: none !important;
+    }
+    .intro-foot {
+      position: absolute;
+      width: 1px;
+      height: 1px; /* screen-reader-only clip, not a rule. taste-skill-ignore */
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .hero-copy,
+    .hero-word {
+      translate: none !important;
+      transition: opacity 300ms ease;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/intro";
+  import "../scripts/hero";
+</script>
